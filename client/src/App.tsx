@@ -1,16 +1,14 @@
-import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
-import Navbar from "./components/Navbar";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./components/Home";
-import "bootstrap/dist/css/bootstrap.min.css";
+import OpenRoute from "./OpenRoute";
+import Navbar from "./components/navbar";
+import Home from "./pages/home";
+import Register from "./pages/register";
+import Login from "./pages/login";
 import "./App.css";
-import OpenRoute from "./OpenRoue";
 
-const App: React.FC = () => {
+export default function App() {
   return (
     <AuthProvider>
       <Router>
@@ -26,6 +24,4 @@ const App: React.FC = () => {
       </Router>
     </AuthProvider>
   );
-};
-
-export default App;
+}

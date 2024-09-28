@@ -6,12 +6,10 @@ interface ProtectedRouteProps {
   component: React.FC;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+export default function ProtectedRoute({
   component: Component,
-}) => {
+}: ProtectedRouteProps) {
   const { user } = useContext(AuthContext);
 
   return user ? <Component /> : <Navigate to="/login" />;
-};
-
-export default ProtectedRoute;
+}

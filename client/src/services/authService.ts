@@ -1,20 +1,13 @@
-import axios from "../axios";
+import { axiosPublic } from "../axios";
+import { AuthUser } from "../models/user";
 
-interface RegisterResponse {
-  id: number;
-  name: string;
-  email: string;
-  token: string;
-}
-
-// Register a new user
 const register = (
   name: string,
   position: string,
   email: string,
   password: string
 ) => {
-  return axios.publicInstance.post<RegisterResponse>("/auth/register", {
+  return axiosPublic.post("/auth/register", {
     name,
     position,
     email,
@@ -22,9 +15,8 @@ const register = (
   });
 };
 
-// Login user
 const login = (email: string, password: string) => {
-  return axios.publicInstance.post<RegisterResponse>("/auth/login", {
+  return axiosPublic.post<AuthUser>("/auth/login", {
     email,
     password,
   });

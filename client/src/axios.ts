@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getToken } from "./utils/storage";
 
-const publicInstance = axios.create({
+const axiosPublic = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
@@ -9,7 +9,7 @@ const publicInstance = axios.create({
 });
 
 // Create private Axios instance
-const privateInstance = axios.create({
+const axiosPrivate = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
@@ -17,7 +17,7 @@ const privateInstance = axios.create({
 });
 
 // Request interceptor to add Authorization header
-privateInstance.interceptors.request.use(
+axiosPrivate.interceptors.request.use(
   (config) => {
     const token = getToken();
     if (token) {
@@ -31,7 +31,7 @@ privateInstance.interceptors.request.use(
 );
 
 // Response interceptor for handling errors (optional)
-privateInstance.interceptors.response.use(
+axiosPrivate.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -43,4 +43,4 @@ privateInstance.interceptors.response.use(
   }
 );
 
-export default { publicInstance, privateInstance };
+export { axiosPublic, axiosPrivate };

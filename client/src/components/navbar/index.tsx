@@ -1,11 +1,10 @@
-// File: ./src/components/Navbar.tsx
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
-const Navbar: React.FC = () => {
+export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate(); // Initialize the navigation hook
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
@@ -15,6 +14,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar d-flex justify-content-between p-2 bg-body-tertiary">
       <Link className="navbar-brand" to="/">
+        <img src="./user-management.png" alt="Logo" width={36} height={36} />{" "}
         Home
       </Link>
       <ul className="navbar-nav d-flex align-items-center flex-row gap-4">
@@ -44,6 +44,4 @@ const Navbar: React.FC = () => {
       </ul>
     </nav>
   );
-};
-
-export default Navbar;
+}

@@ -1,20 +1,9 @@
 import React, { createContext, useState, ReactNode, useEffect } from "react";
-import { getToken } from "../utils/storage";
+import { getToken, removeToken, setToken } from "../utils/storage";
 import { getLoggedUser } from "../services/userService";
-import Loader from "../components/Loader";
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  token: string;
-}
-
-interface AuthContextType {
-  user: User | null;
-  login: (userData: User) => void;
-  logout: () => void;
-}
+import Loader from "../components/shared/loader";
+import { AuthContextType } from "../models/context";
+import { AuthUser } from "../models/user";
 
 const defaultValue = {
   user: null,
@@ -25,17 +14,17 @@ const defaultValue = {
 const AuthContext = createContext<AuthContextType>(defaultValue);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const login = (userData: User) => {
+  const login = (userData: AuthUser) => {
     setUser(userData);
-    localStorage.setItem("token", userData.token);
+    setToken(userData.token);
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("token");
+    removeToken();
   };
 
   useEffect(() => {

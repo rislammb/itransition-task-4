@@ -1,37 +1,24 @@
-import axios from "../axios";
+import { axiosPrivate } from "../axios";
+import { AuthUser, User } from "../models/user";
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  last_login: string;
-  registration_time: string;
-  status: string;
-}
-
-// Get list of users
 const getUsers = () => {
-  return axios.privateInstance.get<User[]>("/users");
+  return axiosPrivate.get<User[]>("/users");
 };
 
-// Get list of users
 const getLoggedUser = () => {
-  return axios.privateInstance.get("/users/user-info");
+  return axiosPrivate.get<AuthUser>("/users/user-info");
 };
 
-// Block a user
 const blockUser = (userId: number) => {
-  return axios.privateInstance.get(`/users/block/${userId}`);
+  return axiosPrivate.get(`/users/block/${userId}`);
 };
 
-// Unblock a user
 const unblockUser = (userId: number) => {
-  return axios.privateInstance.get(`/users/unblock/${userId}`);
+  return axiosPrivate.get(`/users/unblock/${userId}`);
 };
 
-// Delete a user
 const deleteUser = (userId: number) => {
-  return axios.privateInstance.delete(`/users/${userId}`);
+  return axiosPrivate.delete(`/users/${userId}`);
 };
 
 export { getUsers, getLoggedUser, blockUser, unblockUser, deleteUser };

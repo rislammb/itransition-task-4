@@ -6,10 +6,8 @@ interface OpenRouteProps {
   component: React.FC;
 }
 
-const OpenRoute: React.FC<OpenRouteProps> = ({ component: Component }) => {
+export default function OpenRoute({ component: Component }: OpenRouteProps) {
   const { user } = useContext(AuthContext);
 
   return user ? <Navigate to="/" /> : <Component />;
-};
-
-export default OpenRoute;
+}
