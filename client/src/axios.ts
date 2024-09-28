@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getToken } from "./utils/storage";
 
 const publicInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -18,7 +19,7 @@ const privateInstance = axios.create({
 // Request interceptor to add Authorization header
 privateInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }

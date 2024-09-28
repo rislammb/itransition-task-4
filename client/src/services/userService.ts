@@ -9,14 +9,14 @@ interface User {
   status: string;
 }
 
-// const authHeader = () => {
-//   const token = localStorage.getItem("token");
-//   return { headers: { Authorization: `Bearer ${token}` } };
-// };
-
 // Get list of users
 const getUsers = () => {
   return axios.privateInstance.get<User[]>("/users");
+};
+
+// Get list of users
+const getLoggedUser = () => {
+  return axios.privateInstance.get("/users/user-info");
 };
 
 // Block a user
@@ -34,4 +34,4 @@ const deleteUser = (userId: number) => {
   return axios.privateInstance.delete(`/users/${userId}`);
 };
 
-export { getUsers, blockUser, unblockUser, deleteUser };
+export { getUsers, getLoggedUser, blockUser, unblockUser, deleteUser };

@@ -1,4 +1,7 @@
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, useState, ReactNode, useEffect } from "react";
+import { getToken } from "../utils/storage";
+import { getLoggedUser } from "../services/userService";
+import Loader from "../components/Loader";
 
 interface User {
   id: number;
@@ -23,6 +26,7 @@ const AuthContext = createContext<AuthContextType>(defaultValue);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const login = (userData: User) => {
     setUser(userData);
@@ -34,7 +38,27 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     localStorage.removeItem("token");
   };
 
-  return (
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const token = getToken();
+
+      if (token) {
+        try {
+          const response = await getLoggedUser();
+          setUser(response.data);
+        } catch (error) {
+          console.error("Error fetching user info:", error);
+        }
+      }
+      setLoading(false);
+    };
+
+    fetchUserInfo();
+  }, []);
+
+  return loading ? (
+    <Loader />
+  ) : (
     <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>

@@ -25,3 +25,10 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+
+.form-control:focus,
+.form-check-input:focus {
+  border-color: rgba(126, 239, 104, 0.3);
+  box-shadow: 0 0 4px rgba(126, 239, 104, 0.5);
+  outline: 0 none;
+}

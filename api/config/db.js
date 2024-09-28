@@ -16,11 +16,12 @@ db.connect((err) => {
   const sql = `CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
+    position VARCHAR(100),
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     last_login DATETIME DEFAULT NULL,
     registration_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('active', 'blocked') DEFAULT 'active'
+    status ENUM('Active', 'Blocked') DEFAULT 'Active'
   )`;
   db.query(sql, function (err, result) {
     if (err) throw err;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { format } from "date-fns";
-import { TbLockOpen2 } from "react-icons/tb";
+import { TbLock, TbLockOpen2, TbTrash } from "react-icons/tb";
 import {
   getUsers,
   blockUser,
@@ -8,11 +8,11 @@ import {
   deleteUser,
 } from "../services/userService";
 import { AuthContext } from "../context/AuthContext";
-import { MdDeleteOutline } from "react-icons/md";
 
 interface User {
   id: number;
   name: string;
+  position?: string;
   email: string;
   last_login: string;
   registration_time: string;
@@ -20,7 +20,7 @@ interface User {
 }
 
 const Home: React.FC = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
 
@@ -41,8 +41,12 @@ const Home: React.FC = () => {
     try {
       for (let userId of selectedUsers) {
         await blockUser(userId);
+        if (selectedUsers.length === users.length) {
+          logout();
+        } else {
+          fetchUsers(); // Refresh the user list
+        }
       }
-      fetchUsers(); // Refresh the user list
     } catch (error) {
       console.error("Error blocking users", error);
     }
@@ -63,6 +67,9 @@ const Home: React.FC = () => {
     try {
       for (let userId of selectedUsers) {
         await deleteUser(userId);
+        if (selectedUsers.length === users.length) {
+          logout();
+        }
       }
       fetchUsers(); // Refresh the user list
     } catch (error) {
@@ -88,73 +95,83 @@ const Home: React.FC = () => {
 
   return (
     <div className="container my-4">
-      <div className="d-flex gap-4 align-items-center">
+      <div className="d-flex gap-3 align-items-center">
         <button
-          className="btn btn-danger"
+          className="btn btn-outline-secondary"
           disabled={selectedUsers.length === 0}
           onClick={handleBlock}
         >
-          Block
+          <TbLock size={"20px"} /> Block
         </button>
-        <TbLockOpen2
-          title="Unblock"
-          style={{ cursor: "pointer" }}
+        <button
+          className="btn btn-outline-secondary"
           onClick={handleUnblock}
-          size={"28px"}
-          color="dodgerblue"
-          aria-disabled={selectedUsers.length === 0}
-        />
-        <MdDeleteOutline
-          title="Delete"
-          style={{ cursor: "pointer" }}
+          disabled={selectedUsers.length === 0}
+        >
+          <TbLockOpen2 title="Unblock" size={"20px"} />
+        </button>
+        <button
+          className="btn btn-danger"
           onClick={handleDelete}
-          size={"28px"}
-          color="red"
-          aria-disabled={selectedUsers.length === 0}
-        />
+          disabled={selectedUsers.length === 0}
+        >
+          <TbTrash title="Delete" size={"20px"} />
+        </button>
       </div>
-      <div className="card my-2">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>
-                <input type="checkbox" onChange={handleSelectAll} />
-              </th>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Last Login</th>
-              <th>Registration Date</th>
-              <th>Status</th>
+      <table className="table table-striped">
+        <thead>
+          <tr className="align-middle">
+            <th>
+              <input
+                type="checkbox"
+                className="form-check-input"
+                style={{ cursor: "pointer" }}
+                onChange={handleSelectAll}
+              />
+            </th>
+            <th>
+              <span>Name</span> <br />
+              <span className="fw-normal">Position</span>
+            </th>
+            <th>Email</th>
+            <th>Last Login</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((u) => (
+            <tr className="align-middle" key={u.id}>
+              <td>
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  style={{ cursor: "pointer" }}
+                  disabled={u.id === user?.id}
+                  onChange={() => handleSelect(u.id)}
+                  checked={selectedUsers.includes(u.id)}
+                />
+              </td>
+              <td className={u.status === "Blocked" ? "text-muted" : ""}>
+                <h6>{u.name}</h6>
+                <span>{u.position || "-"}</span>
+              </td>
+              <td className={u.status === "Blocked" ? "text-muted" : ""}>
+                {u.email}
+              </td>
+              <td
+                className={`small ${
+                  u.status === "Blocked" ? "text-muted" : ""
+                }`}
+              >
+                {u.last_login
+                  ? format(u.last_login, "HH:mm:ss, dd MMM, yyyy")
+                  : "-"}
+              </td>
+              <td>{u.status}</td>
             </tr>
-          </thead>
-          <tbody>
-            {users.map((u) => (
-              <tr key={u.id}>
-                <td>
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    disabled={u.id === user?.id}
-                    onChange={() => handleSelect(u.id)}
-                    checked={selectedUsers.includes(u.id)}
-                  />
-                </td>
-                <td>{u.id}</td>
-                <td>{u.name}</td>
-                <td>{u.email}</td>
-                <td className="small">
-                  {u.last_login && format(u.last_login, "hh:mm aaa, dd MMM")}
-                </td>
-                <td className="small">
-                  {format(u.registration_time, "hh:mm aaa, dd MMM")}
-                </td>
-                <td>{u.status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

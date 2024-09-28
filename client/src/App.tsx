@@ -8,6 +8,7 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import OpenRoute from "./OpenRoue";
 
 const App: React.FC = () => {
   return (
@@ -15,8 +16,11 @@ const App: React.FC = () => {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<OpenRoute component={Login} />} />
+          <Route
+            path="/register"
+            element={<OpenRoute component={Register} />}
+          />
           <Route path="/" element={<ProtectedRoute component={Home} />} />
         </Routes>
       </Router>

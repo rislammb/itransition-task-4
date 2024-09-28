@@ -17,13 +17,16 @@ const Navbar: React.FC = () => {
       <Link className="navbar-brand" to="/">
         Home
       </Link>
-      <ul className="navbar-nav d-flex flex-row gap-4">
+      <ul className="navbar-nav d-flex align-items-center flex-row gap-4">
         {user ? (
-          <li className="nav-item">
-            <button className="nav-link" onClick={handleLogout}>
-              Logout
-            </button>
-          </li>
+          <>
+            <li className="nav-item">Hello, {user.name}!</li>
+            <li className="nav-item">
+              <button className="nav-link" onClick={handleLogout}>
+                Logout
+              </button>
+            </li>
+          </>
         ) : (
           <>
             <li className="nav-item">

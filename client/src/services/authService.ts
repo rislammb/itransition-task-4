@@ -8,9 +8,15 @@ interface RegisterResponse {
 }
 
 // Register a new user
-const register = (name: string, email: string, password: string) => {
+const register = (
+  name: string,
+  position: string,
+  email: string,
+  password: string
+) => {
   return axios.publicInstance.post<RegisterResponse>("/auth/register", {
     name,
+    position,
     email,
     password,
   });

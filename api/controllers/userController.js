@@ -8,7 +8,15 @@ exports.getUsers = (_req, res) => {
       console.error("Error executing query:", err.message);
       return res.status(500).send("Server error");
     }
-    res.json(results);
+    return res.json(results);
+  });
+};
+
+exports.getLoggedUser = (req, res) => {
+  res.json({
+    userId: req.user.id,
+    name: req.user.name,
+    email: req.user.email,
   });
 };
 
@@ -20,7 +28,7 @@ exports.blockUser = (req, res) => {
 
   db.query(query, [userId], (err, result) => {
     if (err) return res.status(500).send("Error blocking user");
-    res.status(200).send("User blocked successfully");
+    return res.status(200).send("User blocked successfully");
   });
 };
 
@@ -32,7 +40,7 @@ exports.unblockUser = (req, res) => {
 
   db.query(query, [userId], (err, result) => {
     if (err) return res.status(500).send("Error unblocking user");
-    res.status(200).send("User unblocked successfully");
+    return res.status(200).send("User unblocked successfully");
   });
 };
 
@@ -44,6 +52,6 @@ exports.deleteUser = (req, res) => {
 
   db.query(query, [userId], (err, result) => {
     if (err) return res.status(500).send("Error deleting user");
-    res.status(200).send("User deleted successfully");
+    return res.status(200).send("User deleted successfully");
   });
 };

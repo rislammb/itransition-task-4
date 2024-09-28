@@ -6,6 +6,7 @@ import { isAxiosError } from "axios";
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const [name, setName] = useState<string>("");
+  const [position, setPosition] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -13,7 +14,7 @@ const Register: React.FC = () => {
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await register(name, email, password);
+      await register(name, position, email, password);
       navigate("/login");
     } catch (err) {
       console.error("Registration failed", err);
@@ -38,6 +39,16 @@ const Register: React.FC = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+          />
+        </div>
+        <div className="form-group my-4">
+          <label htmlFor="position">Position</label>
+          <input
+            type="text"
+            id="position"
+            className="form-control"
+            value={position}
+            onChange={(e) => setPosition(e.target.value)}
           />
         </div>
         <div className="form-group my-4">
