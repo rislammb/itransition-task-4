@@ -1,7 +1,8 @@
 const db = require("../config/db");
 
 exports.getUsers = (_req, res) => {
-  const query = "SELECT * FROM users";
+  const query =
+    "SELECT id, email, name, last_login,  position, registration_time,status FROM users";
 
   db.query(query, (err, results) => {
     if (err) {
@@ -14,7 +15,7 @@ exports.getUsers = (_req, res) => {
 
 exports.getLoggedUser = (req, res) => {
   res.json({
-    userId: req.user.id,
+    id: req.user.id,
     name: req.user.name,
     email: req.user.email,
   });
