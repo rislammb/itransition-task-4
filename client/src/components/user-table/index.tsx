@@ -19,7 +19,7 @@ export default function UserTable({
   const { user } = useContext(AuthContext);
 
   return (
-    <table className="table table-striped">
+    <table className="table table-striped table-bordered">
       <thead>
         <tr className="align-middle">
           <th>
